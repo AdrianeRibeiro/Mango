@@ -45,7 +45,7 @@ describe('FacebookApi', () => {
       url: 'https://graph.facebook.com/debug_token',
       params: {
         access_token: 'any_app_token',
-        input_token: 'any_client_secret'
+        input_token: 'any_client_token'
       }
     })
   })
