@@ -15,3 +15,4 @@ npm i -D lint-staged
 
 
 npm i -D husky
+nvm install v14.15.0
