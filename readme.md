@@ -16,3 +16,5 @@ npm i -D lint-staged
 
 npm i -D husky
 nvm install v14.15.0
+    //"typeorm": "^0.3.12"
+        "pg-mem": "^2.6.6",
