@@ -6,5 +6,5 @@ export default (router: Router): void => {
   const controller = makeFacebookLoginController()
   const adapter = adapt(controller)
 
-  router.post('/api/login/facebook', adapter)
+  router.post('/login/facebook', adapter)
 }
