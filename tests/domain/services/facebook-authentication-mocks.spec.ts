@@ -1,5 +1,5 @@
-/*import { LoadFacebookUserApi } from "@/data/contracts/apis"
-import { FacebookAuthenticationService } from "@/data/services"
+/*import { LoadFacebookUserApi } from "@/domain/contracts/apis"
+import { FacebookAuthenticationService } from "@/domain/services"
 import { AuthenticationError } from "@/domain/errors"
 import { mock, MockProxy } from 'jest-mock-extended'
 
