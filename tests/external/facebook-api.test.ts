@@ -12,10 +12,10 @@ describe('Facebook API integration Tests', () => {
   })
 
   it('should return a Facebook User if token is valid', async () => {
-    const fbUser = await sut.loadUser({ token: '8e941699dca5cd7f5b3677897442a64b' })
+    const fbUser = await sut.loadUser({ token: env.facebookApi.token })
 
     expect(fbUser).toEqual({
-      facebookId: '7927',
+      facebookId: '2544860782344780',
       name: 'Adriane Ribeiro',
       email: 'adrianeribeiro94@yahoo.com.br'
     })
