@@ -1,6 +1,6 @@
 import { FacebookAuthentication } from "@/domain/features"
 import { HttpResponse, badRequest, ok, serverError, unauthorized } from "@/application/helpers"
-import { AccessToken } from "@/domain/models"
+import { AccessToken } from "@/domain/entities"
 import { RequiredStringValidator, ValidationBuilder, ValidationComposite, Validator } from "@/application/validation"
 import { Controller } from "@/application/controllers"
 
