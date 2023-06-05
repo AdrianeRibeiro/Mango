@@ -10,6 +10,12 @@ class AuthenticationMiddleware {
 }
 
 describe('AuthenticationMiddleware', () => {
+  let sut: AuthenticationMiddleware
+
+  beforeEach(() => {
+    sut = new AuthenticationMiddleware()
+  })
+
   it('should return 403 if authorization is empty', async () => {
     const sut = new AuthenticationMiddleware()
 
