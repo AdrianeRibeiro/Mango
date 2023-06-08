@@ -12,7 +12,7 @@ describe('adaptExpressRoute', () => {
   let controller: MockProxy<Controller>
   let sut: RequestHandler
 
-  beforeEach(() => {
+  beforeAll(() => {
     req = getMockReq({ body: { any: 'any' } })
     res = getMockRes().res
     next = getMockRes().next
@@ -21,6 +21,9 @@ describe('adaptExpressRoute', () => {
       statusCode: 200,
       data: { data: 'any_data' }
     })
+  })
+
+  beforeEach(() => {
     sut = adaptExpressRoute(controller)
   })
 
