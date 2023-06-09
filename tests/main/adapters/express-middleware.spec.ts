@@ -16,7 +16,7 @@ describe('ExpressMidleware', () => {
     res = getMockRes().res
     next = getMockRes().next
     middleware = mock<Middleware>()
-    middleware.handle.mockResolvedValueOnce({
+    middleware.handle.mockResolvedValue({
       statusCode: 200,
       data: {
         emptyProp: '',
