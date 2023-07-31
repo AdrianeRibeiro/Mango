@@ -1,4 +1,4 @@
-import { mock } from "jest-mock-extended"
+import { MockProxy, mock } from "jest-mock-extended"
 
 type Setup = (fileStorage: UploadFile, crypto: UUIDGenerator) => ChangeProfilePicture
 type Input = { id: string, file: Buffer }
@@ -26,6 +26,21 @@ namespace UUIDGenerator {
 }
 
 describe('ChangeProfilePicture', () => {
+  let uuid: string
+  let file: Buffer
+  let fileStorage: MockProxy<UploadFile>
+  let crypto: MockProxy<UUIDGenerator>
+  let sut: ChangeProfilePicture
+
+  beforeEach(() => {
+    uuid = 'any_unique_id'
+    file = Buffer.from('any_buffer')
+    fileStorage = mock<UploadFile>()
+    crypto = mock<UUIDGenerator>()
+    crypto.uuid.mockReturnValue(uuid)
+    sut = setupChangeProfilePicture(fileStorage, crypto)
+  })
+
   it('should call UploadFile with correct input', async () => {
     const uuid = 'any_unique_id'
     const file = Buffer.from('any_buffer')
