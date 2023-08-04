@@ -7,8 +7,8 @@ export class UserProfile {
   setPicture ({ pictureUrl, name}: { pictureUrl?: string, name?: string }): void {
     this.pictureUrl = pictureUrl
 
-    if(pictureUrl === undefined && name !== undefined) {
-      const firstLetters = name.match(/\b(.)/g) ?? []
+    if(pictureUrl === undefined && !!name) {
+      const firstLetters = name.match(/\b(.)/g)!
       if(firstLetters.length > 1) {
         this.initials = `${firstLetters.shift()?.toUpperCase() ?? ''}${firstLetters.pop()?.toUpperCase() ?? ''}`
       } else {
