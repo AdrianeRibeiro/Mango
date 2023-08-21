@@ -17,7 +17,7 @@ describe('UUIDHandler', () => {
   })
 
   it('should return correct uuid', () => {
-    //mocked(v4).mockReturnValueOnce('any_uuid')
+    // mocked(v4).mockReturnValueOnce('any_uuid')
 
     sut.uuid({ key: 'any_key' })
 
