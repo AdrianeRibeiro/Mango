@@ -47,11 +47,11 @@ describe('AwsS3FileStorage', () => {
       /*mocked(S3).mockImplementationOnce(jest.fn().mockImplementationOnce(() => ({
         putObject: putObjectSpy
       })))*/
-  
+
       S3.prototype.putObject = putObjectSpy
-  
+
       await sut.upload({ key, file })
-  
+
       expect(putObjectSpy).toHaveBeenCalledWith({
         Bucket: bucket,
         Key: key,
@@ -109,6 +109,15 @@ describe('AwsS3FileStorage', () => {
 
       expect(deleteObjectPromiseSpy).toHaveBeenCalledTimes(1)
       expect(deleteObjectSpy).toHaveBeenCalledTimes(1)
+    })
+
+    it('should rethrow if deleteObject throws', async () => {
+      const error = new Error('delete_error')
+      deleteObjectPromiseSpy.mockRejectedValueOnce(error)
+
+      const promise = sut.delete({ key })
+
+      await expect(promise).rejects.toThrow(error)
     })
   })
 })
