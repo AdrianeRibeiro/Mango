@@ -32,7 +32,7 @@ describe('ChangeProfilePicture', () => {
   })
 
   it('should call UploadFile with correct input', async () => {
-    await sut({ id: 'any_id', file: file })
+    await sut({ id: 'any_id', file })
 
     expect(fileStorage.upload).toHaveBeenCalledWith({ file, key: uuid })
     expect(fileStorage.upload).toHaveBeenCalledTimes(1)
@@ -46,6 +46,13 @@ describe('ChangeProfilePicture', () => {
 
   it('should call SaveUserPicture with correct input', async () => {
     await sut({ id: 'any_id', file })
+
+    //expect(userProfileRepo.savePicture).toHaveBeenCalledWith(mock(UserProfile))
+    expect(userProfileRepo.savePicture).toHaveBeenCalledTimes(1)
+  })
+
+  it('should call SaveUserPicture with correct input', async () => {
+    userProfileRepo.load.mockResolvedValueOnce(undefined)
 
     //expect(userProfileRepo.savePicture).toHaveBeenCalledWith(mock(UserProfile))
     expect(userProfileRepo.savePicture).toHaveBeenCalledTimes(1)

@@ -1,7 +1,7 @@
-import { SaveUserPicture } from "@/domain/contracts/repos"
-import { PgUser } from "@/infra/repos/postgres/entities"
+import { SaveUserPicture } from '@/domain/contracts/repos'
+import { PgUser } from '@/infra/repos/postgres/entities'
 
-import { getRepository } from "typeorm"
+import { getRepository } from 'typeorm'
 
 export class PgUserProfileRepository implements SaveUserPicture {
   async savePicture ({ id, pictureUrl, initials }: SaveUserPicture.Input): Promise<void> {
