@@ -1,6 +1,6 @@
 import { InvalidMymeTypeError } from "@/application/errors"
 
-type Extension = 'png' | 'jpg'
+export type Extension = 'png' | 'jpg'
 
 export class AllowedMimeTypes {
   constructor(
