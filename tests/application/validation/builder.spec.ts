@@ -34,7 +34,7 @@ describe('ValidationBuilder', () => {
     const buffer = Buffer.from('any_buffer')
 
     const validators = ValidationBuilder
-      .of({ value: buffer })
+      .of({ value: { buffer } })
       .required()
       .build()
 
