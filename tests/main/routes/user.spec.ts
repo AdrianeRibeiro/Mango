@@ -10,24 +10,45 @@ import { sign } from 'jsonwebtoken'
 import { env } from '@/main/config/env'
 
 describe('User Routes', () => {
+  let backup: IBackup
+  let pgUserRepo: Repository<PgUser>
+
+  beforeAll(async () => {
+    const db = await makeFakeDb([PgUser])
+    backup = db.backup()
+    pgUserRepo = getRepository(PgUser)
+  })
+
+  afterAll(async () => {
+    await getConnection().close()
+  })
+
+  beforeEach(() => {
+    backup.restore()
+  })
+
   describe('DELETE /users/picture', () => {
-    let backup: IBackup
-    let pgUserRepo: Repository<PgUser>
+    it('should return 403 with no authorization header is present', async() => {
+      const { status } = await request(app)
+                                    .delete('/api/users/picture')
 
-    beforeAll(async () => {
-      const db = await makeFakeDb([PgUser])
-      backup = db.backup()
-      pgUserRepo = getRepository(PgUser)
+      expect(status).toBe(403)
     })
 
-    afterAll(async () => {
-      await getConnection().close()
-    })
+    it('should return 200 with valid data', async() => {
+      const { id } = await pgUserRepo.save({ email: 'any_email', name: 'Adriane Ribeiro' })
+      const authorization = sign({ key: id }, env.jwtSecret)
 
-    beforeEach(() => {
-      backup.restore()
-    })
+      const { status, body } = await request(app)
+                                    .delete('/api/users/picture')
+                                    .set({ authorization })
 
+      expect(status).toBe(200)
+      expect(body).toEqual({ pictureUrl: undefined, initials: 'AR' })
+    })
+  })
+
+  describe('PUT /users/picture', () => {
     it('should return 403 with no authorization header is present', async() => {
       const { status } = await request(app)
                                     .delete('/api/users/picture')
