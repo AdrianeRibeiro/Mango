@@ -1,4 +1,4 @@
-import { Connection, createConnection, getConnection, getConnectionManager } from "typeorm"
+import { QueryRunner, createConnection, getConnection, getConnectionManager } from "typeorm"
 
 jest.mock('typeorm', () => ({
   Entity: jest.fn(),
@@ -11,12 +11,13 @@ jest.mock('typeorm', () => ({
 
 class PgConnection {
   private static instance?: PgConnection
+  private query?: QueryRunner
 
   private constructor() {}
 
-  static getInstance (): any {
-    if(PgConnection.instance === undefined) {
-      PgConnection.instance == new PgConnection()
+  static getInstance (): PgConnection {
+    if(PgConnection.instance == undefined) {
+      PgConnection.instance = new PgConnection()
     }
 
     return PgConnection.instance
@@ -27,7 +28,12 @@ class PgConnection {
       ? getConnection()
       : await createConnection()
 
-    connection.createQueryRunner()
+    this.query = connection.createQueryRunner()
+  }
+
+  async disconnect(): Promise<void> {
+    await getConnection().close()
+    this.query = undefined
   }
 }
 
@@ -37,6 +43,7 @@ describe('PgConnection', () => {
   let createConnectionSpy: jest.Mock
   let getConnectionSpy: jest.Mock
   let hasSpy: jest.Mock
+  let closeSpy: jest.Mock
   let sut: PgConnection
 
   beforeAll(() => {
@@ -47,7 +54,6 @@ describe('PgConnection', () => {
     getConnectionManagerSpy.mockImplementation(getConnectionManager);
     //jest.fn().mockImplementation(getConnectionManagerSpy) mocked(getConnectionManager).mockImplementationOnce(getConnectionManagerSpy)
 
-
     createQueryRunnerSpy = jest.fn()
     createConnectionSpy = jest.fn().mockResolvedValue({
       createQueryRunner: createQueryRunnerSpy
@@ -55,8 +61,10 @@ describe('PgConnection', () => {
     createConnectionSpy.mockImplementation(createConnection)
     //jest.fn().mockImplementation(getConnectionManagerSpy) //mocked(createConnection).mockImplementationOnce(createConnectionSpy)
 
+    closeSpy = jest.fn()
     getConnectionSpy = jest.fn().mockReturnValue({
-      createQueryRunner: createQueryRunnerSpy
+      createQueryRunner: createQueryRunnerSpy,
+      close: closeSpy
     })
     getConnectionSpy.mockImplementation(getConnection);
   })
@@ -84,6 +92,17 @@ describe('PgConnection', () => {
 
   it('should use an existing connection', async () => {
     await sut.connect()
+
+    expect(getConnectionSpy).toHaveBeenCalledWith()
+    expect(getConnectionSpy).toHaveBeenCalledTimes(1)
+
+    expect(createQueryRunnerSpy).toHaveBeenCalledWith()
+    expect(createQueryRunnerSpy).toHaveBeenCalledTimes(1)
+  })
+
+  it('should close connection', async () => {
+    await sut.connect()
+    await sut.disconnect()
 
     expect(getConnectionSpy).toHaveBeenCalledWith()
     expect(getConnectionSpy).toHaveBeenCalledTimes(1)
