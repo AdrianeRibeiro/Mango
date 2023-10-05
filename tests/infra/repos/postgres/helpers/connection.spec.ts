@@ -5,7 +5,7 @@ jest.mock('typeorm', () => ({
   PrimaryGeneratedColumn: jest.fn(),
   Column: jest.fn(),
   createConnection: jest.fn(),
-  getConnectionSpy: jest.fn(),
+  getConnection: jest.fn(),
   getConnectionManager: jest.fn()
 }))
 
@@ -23,14 +23,9 @@ class PgConnection {
   }
 
   async connect(): Promise<void> {
-    let connection: Connection
-
-    if(getConnectionManager().has('default')) {
-      connection = await getConnection()
-    } else {
-      connection = await createConnection()
-
-    }
+    const connection = getConnectionManager().has('default')
+      ? getConnection()
+      : await createConnection()
 
     connection.createQueryRunner()
   }
