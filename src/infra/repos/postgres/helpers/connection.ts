@@ -1,4 +1,4 @@
-import { QueryRunner, createConnection, getConnection, getConnectionManager } from "typeorm"
+import { ObjectLiteral, ObjectType, QueryRunner, Repository, createConnection, getConnection, getConnectionManager } from "typeorm"
 import { ConnectionNotFoundError } from "@/infra/repos/postgres/helpers"
 
 export class PgConnection {
@@ -52,5 +52,12 @@ export class PgConnection {
     if(this.query === undefined) throw new ConnectionNotFoundError()
 
     await this.query.rollbackTransaction()
+  }
+
+  //getRepository<Entity> (entity: ObjectType<Entity>): Repository<Entity>
+  getRepository<Entity extends ObjectLiteral> (entity: ObjectType<Entity>): Repository<Entity> {
+    if(this.query === undefined) throw new ConnectionNotFoundError()
+
+    return this.query.manager.getRepository(entity)
   }
 }
