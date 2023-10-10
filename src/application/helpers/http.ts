@@ -1,6 +1,6 @@
-import { ServerError, UnauthorizedError, ForbiddenError } from "@/application/errors"
+import { ServerError, UnauthorizedError, ForbiddenError } from '@/application/errors'
 
-export type HttpResponse<T = any>= {
+export type HttpResponse<T = any> = {
   statusCode: number
   data: T
 }
@@ -30,7 +30,8 @@ export const forbidden = (): HttpResponse<Error> => ({
   data: new ForbiddenError()
 })
 
-export const serverError = (error: Error): HttpResponse<Error> => ({
+// eslint-disable-next-line n/handle-callback-err
+export const serverError = (error: unknown): HttpResponse<Error> => ({
   statusCode: 500,
-  data: new ServerError()
+  data: new ServerError(error instanceof Error ? error : undefined)
 })
